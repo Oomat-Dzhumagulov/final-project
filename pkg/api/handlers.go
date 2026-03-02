@@ -12,6 +12,9 @@ import (
 const DateFormat = "20060102"
 
 func NextDateHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "метод не подерживается", http.StatusMethodNotAllowed)
+	}
 	nowStr := r.FormValue("now")
 	dateStr := r.FormValue("date")
 	repeatStr := r.FormValue("repeat")

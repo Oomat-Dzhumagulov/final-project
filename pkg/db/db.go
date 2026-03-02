@@ -33,6 +33,7 @@ func Init(dbFile string) error {
 	}
 
 	if err = DB.Ping(); err != nil {
+		DB.Close()
 		return fmt.Errorf("БД недоступна: %w", err)
 	}
 

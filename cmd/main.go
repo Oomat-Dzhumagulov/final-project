@@ -20,6 +20,6 @@ func main() {
 	defer db.DB.Close()
 
 	if err := server.Start(); err != nil {
-		log.Fatalf("Ошибка при запуске сервера: %v", err)
+		log.Printf("Ошибка при запуске сервера: %v", err)
 	}
 }

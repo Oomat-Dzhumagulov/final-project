@@ -11,6 +11,8 @@ import (
 	"github.com/Oomat-Dzhumagulov/final-project/pkg/scheduler"
 )
 
+const taskLimit = 50
+
 type TasksResp struct {
 	Tasks []*db.Task `json:"tasks"`
 }
@@ -41,9 +43,9 @@ func TasksHandler(w http.ResponseWriter, r *http.Request) {
 
 	search := r.FormValue("search")
 	if search != "" {
-		tasks, err = db.TasksBySerch(search, 50)
+		tasks, err = db.TasksBySerch(search, taskLimit)
 	} else {
-		tasks, err = db.Tasks(50)
+		tasks, err = db.Tasks(taskLimit)
 	}
 	if err != nil {
 		writeError(w, "ошибка получания задач", http.StatusInternalServerError)
@@ -85,13 +87,13 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 func correctTaskDate(task *db.Task) error {
 	now := time.Now()
-	nowStr := now.Format("20060102")
+	nowStr := now.Format(DateFormat)
 
 	if task.Date == "" {
 		task.Date = nowStr
 	}
 
-	t, err := time.Parse("20060102", task.Date)
+	t, err := time.Parse(DateFormat, task.Date)
 	if err != nil {
 		return fmt.Errorf("ошибка парсинга: %w", err)
 	}
